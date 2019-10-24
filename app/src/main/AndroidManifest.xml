@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.duc010298.musicplayer">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
 
     <application
         android:allowBackup="true"
@@ -18,7 +17,8 @@
             android:enabled="true"
             android:exported="true"></service>
 
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.HelloActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

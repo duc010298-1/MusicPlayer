@@ -1,64 +1,105 @@
 package com.github.duc010298.musicplayer.service;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Bundle;
+import android.os.Binder;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.util.Log;
 
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
+import com.github.duc010298.musicplayer.model.Song;
 
-import com.github.duc010298.musicplayer.R;
-import com.github.duc010298.musicplayer.activity.MainActivity;
+import java.util.ArrayList;
 
-public class SoundService extends Service {
-    private NotificationCompat.Builder notification;
-    private NotificationManager nm;
-    private static final int id = 1;
-    private MediaPlayer mp;
+public class SoundService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
+    //media player
+    private MediaPlayer player;
+    //song list
+    private ArrayList<Song> songs;
+    //current position
+    private int songPosn;
 
-    @Override
+    private final IBinder musicBind = new MusicBinder();
+
+    public SoundService() {
+    }
+
     public void onCreate() {
-        mp = new MediaPlayer();
-
-        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notification = new NotificationCompat.Builder(this);
+        //create the service
+        super.onCreate();
+        //initialize position
+        songPosn = 0;
+        //create player
+        player = new MediaPlayer();
+        initMusicPlayer();
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Bundle b = intent.getExtras();
-        mp = MediaPlayer.create(this, Uri.parse(b.getString("music")));
-        mp.start();
-        makeNotification(b);
-        return START_STICKY;
+    public void initMusicPlayer() {
+        player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        player.setOnPreparedListener(this);
+        player.setOnCompletionListener(this);
+        player.setOnErrorListener(this);
     }
 
-    @Override
-    public void onDestroy() {
-        mp.stop();
-        nm.cancel(id);
+    public void setList(ArrayList<Song> theSongs) {
+        songs = theSongs;
     }
 
-    @Nullable
+    public class MusicBinder extends Binder {
+        public SoundService getService() {
+            return SoundService.this;
+        }
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return musicBind;
     }
 
-    private void makeNotification(Bundle b) {
+    @Override
+    public boolean onUnbind(Intent intent) {
+        player.stop();
+        player.release();
+        return false;
+    }
 
-        notification.setSmallIcon(R.mipmap.ic_launcher);
-        notification.setContentTitle("Reproduciendo musica");
-        notification.setContentText(b.getString("name"));
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+    }
 
-        PendingIntent notificationAction = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
-        notification.setContentIntent(notificationAction);
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        return false;
+    }
 
-        nm.notify(id, notification.build());
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        mp.start();
+    }
+
+    public void setSong(int songIndex) {
+        songPosn = songIndex;
+    }
+
+    public void playSong() {
+        player.reset();
+        //get song
+        Song playSong = songs.get(songPosn);
+        //get id
+        long currSong = playSong.getId();
+        //set uri
+        Uri trackUri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currSong);
+
+        try {
+            player.setDataSource(getApplicationContext(), trackUri);
+        } catch (Exception e) {
+            Log.e("MUSIC SERVICE", "Error setting data source", e);
+        }
+        player.prepareAsync();
     }
 }

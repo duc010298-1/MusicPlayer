@@ -15,13 +15,13 @@
         android:id="@+id/songView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/bStopMusic" />
+        android:layout_above="@+id/actionEnd" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stop"
-        android:id="@+id/bStopMusic"
+        android:id="@+id/actionEnd"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

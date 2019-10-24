@@ -5,30 +5,39 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.github.duc010298.musicplayer.R;
 import com.github.duc010298.musicplayer.adapter.SongAdapter;
 import com.github.duc010298.musicplayer.model.Song;
+import com.github.duc010298.musicplayer.service.SoundService;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Song> songList;
     private ListView songView;
+    private SoundService soundService;
+    private Intent playIntent;
+    private boolean musicBound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        checkPermission();
 
         songView = findViewById(R.id.songView);
         songList = new ArrayList<>();
@@ -40,36 +49,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 1) {
-            for (int grantResult : grantResults) {
-                if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Không đủ quyền truy cập", Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            }
+    protected void onStart() {
+        super.onStart();
+        if (playIntent == null) {
+            playIntent = new Intent(this, SoundService.class);
+            bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+            startService(playIntent);
         }
     }
 
-    private void checkPermission() {
-        String[] listPermission = new String[]{
-                android.Manifest.permission.INTERNET,
-                android.Manifest.permission.READ_PHONE_STATE,
-                android.Manifest.permission.ACCESS_NETWORK_STATE,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.RECEIVE_BOOT_COMPLETED};
-        boolean isHaveEnoughPermission = true;
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            isHaveEnoughPermission = false;
+    //connect to the service
+    private ServiceConnection musicConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            SoundService.MusicBinder binder = (SoundService.MusicBinder) service;
+            //get service
+            soundService = binder.getService();
+            //pass list
+            soundService.setList(songList);
+            musicBound = true;
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED) {
-            isHaveEnoughPermission = false;
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            musicBound = false;
         }
-        if (!isHaveEnoughPermission) {
-            ActivityCompat.requestPermissions(this, listPermission, 1);
-        }
-    }
+    };
 
     public void getSongList() {
         ContentResolver musicResolver = getContentResolver();
@@ -93,5 +99,22 @@ public class MainActivity extends AppCompatActivity {
             }
             while (musicCursor.moveToNext());
         }
+    }
+
+    public void songPicked(View view) {
+        soundService.setSong(Integer.parseInt(view.getTag().toString()));
+        soundService.playSong();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actionEnd:
+                stopService(playIntent);
+                soundService = null;
+                System.exit(0);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
