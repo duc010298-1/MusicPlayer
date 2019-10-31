@@ -10,6 +10,7 @@
         android:id="@+id/btnBack"
         android:layout_width="78dp"
         android:layout_height="48dp"
+        android:onClick="playPrevious"
         android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnMix" />
@@ -18,7 +19,8 @@
         android:id="@+id/btnLoop"
         android:layout_width="78dp"
         android:layout_height="48dp"
-        android:text="Loop"
+        android:onClick="onLoopClick"
+        android:text="Looping"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.111"
@@ -28,6 +30,7 @@
         android:id="@+id/btnNext"
         android:layout_width="78dp"
         android:layout_height="48dp"
+        android:onClick="playNext"
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnStopPlay" />
@@ -45,17 +48,25 @@
         android:id="@+id/btnStopPlay"
         android:layout_width="78dp"
         android:layout_height="48dp"
-        android:text="Stop"
+        android:onClick="onStopClickPlay"
+        android:text="Play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnBack" />
+
+    <SeekBar
+        android:id="@+id/seekBar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnStopPlay" />
 
     <ListView
         android:id="@+id/songView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/btnStopPlay"/>
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar2"
+        tools:layout_editor_absoluteX="0dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
