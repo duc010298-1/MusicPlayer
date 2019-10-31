@@ -1,9 +1,10 @@
-package com.github.duc010298.musicplayer.model;
+package com.github.duc010298.musicplayerrebuild.model;
 
 public class Song {
     private long id;
     private String title;
     private String artist;
+    private String thumbnailImage;
 
     public Song(long songID, String songTitle, String songArtist) {
         id = songID;
@@ -33,5 +34,13 @@ public class Song {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public String getThumbnailImage() {
+        return thumbnailImage;
+    }
+
+    public void setThumbnailImage(String thumbnailImage) {
+        this.thumbnailImage = thumbnailImage;
     }
 }

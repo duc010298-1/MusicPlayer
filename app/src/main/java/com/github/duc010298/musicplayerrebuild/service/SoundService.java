@@ -1,4 +1,4 @@
-package com.github.duc010298.musicplayer.service;
+package com.github.duc010298.musicplayerrebuild.service;
 
 import android.app.Service;
 import android.content.ContentUris;
@@ -11,7 +11,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
-import com.github.duc010298.musicplayer.model.Song;
+import com.github.duc010298.musicplayerrebuild.model.Song;
 
 import java.util.ArrayList;
 

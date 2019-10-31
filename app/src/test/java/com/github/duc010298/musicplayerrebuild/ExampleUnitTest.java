@@ -1,4 +1,4 @@
-package com.github.duc010298.musicplayer;
+package com.github.duc010298.musicplayerrebuild;
 
 import org.junit.Test;
 

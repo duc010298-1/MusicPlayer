@@ -1,16 +1,12 @@
-package com.github.duc010298.musicplayer.activity;
+package com.github.duc010298.musicplayerrebuild.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,12 +14,11 @@ import android.os.IBinder;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.github.duc010298.musicplayer.R;
-import com.github.duc010298.musicplayer.adapter.SongAdapter;
-import com.github.duc010298.musicplayer.model.Song;
-import com.github.duc010298.musicplayer.service.SoundService;
+import com.github.duc010298.musicplayerrebuild.R;
+import com.github.duc010298.musicplayerrebuild.adapter.SongAdapter;
+import com.github.duc010298.musicplayerrebuild.model.Song;
+import com.github.duc010298.musicplayerrebuild.service.SoundService;
 
 import java.util.ArrayList;
 
@@ -47,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         SongAdapter songAdt = new SongAdapter(this, songList);
         songView.setAdapter(songAdt);
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -109,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.actionEnd:
+            case R.id.btnStopPlay:
                 stopService(playIntent);
                 soundService = null;
                 System.exit(0);
