@@ -1,4 +1,4 @@
-package com.github.duc010298.musicplayerrebuild;
+package com.github.duc010298.musicplayer;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.github.duc010298.musicplayerrebuild", appContext.getPackageName());
+        assertEquals("com.github.duc010298.musicplayer", appContext.getPackageName());
     }
 }

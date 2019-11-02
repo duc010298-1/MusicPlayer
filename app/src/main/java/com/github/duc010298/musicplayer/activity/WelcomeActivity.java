@@ -1,4 +1,4 @@
-package com.github.duc010298.musicplayerrebuild.activity;
+package com.github.duc010298.musicplayer.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.github.duc010298.musicplayerrebuild.R;
+import com.github.duc010298.musicplayer.R;
 
 public class WelcomeActivity extends AppCompatActivity {
     private Dialog dialog;

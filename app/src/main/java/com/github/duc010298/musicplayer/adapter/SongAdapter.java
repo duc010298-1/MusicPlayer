@@ -1,17 +1,19 @@
-package com.github.duc010298.musicplayerrebuild.adapter;
+package com.github.duc010298.musicplayer.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.duc010298.musicplayerrebuild.R;
-import com.github.duc010298.musicplayerrebuild.model.Song;
+import com.github.duc010298.musicplayer.R;
+import com.github.duc010298.musicplayer.model.Song;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class SongAdapter extends BaseAdapter {
     private ArrayList<Song> songs;
@@ -44,14 +46,25 @@ public class SongAdapter extends BaseAdapter {
         //get title and artist views
         TextView songView = (TextView) songLayout.findViewById(R.id.songTitle);
         TextView artistView = (TextView) songLayout.findViewById(R.id.songArtist);
+        ImageView albumView = (ImageView) songLayout.findViewById(R.id.album);
+        TextView duration = (TextView) songLayout.findViewById(R.id.duration);
         //get song using position
         Song currSong = songs.get(position);
         //get title and artist strings
         songView.setText(currSong.getTitle());
         artistView.setText(currSong.getArtist());
+        duration.setText(convertDuration(currSong.getDuration()));
         //set position as tag
         songLayout.setTag(position);
         return songLayout;
+    }
+
+    private String convertDuration(long timeSec) {
+        return String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(timeSec),
+                TimeUnit.MILLISECONDS.toSeconds(timeSec) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeSec))
+        );
     }
 
 }
