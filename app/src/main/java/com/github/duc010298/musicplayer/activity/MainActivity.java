@@ -82,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
                 String name = bundle.getString("name");
                 if (name != null) {
                     songName.setText(name);
+                    remoteViews.setTextViewText(R.id.songName, name);
+                    mNotificationManager.notify(1, notification);
                 }
             }
         }
@@ -112,15 +114,16 @@ public class MainActivity extends AppCompatActivity {
         initVariable();
         getSongListOnDevice();
         registerReceiver(receiveData, new IntentFilter("musicRequest"));
-        mChannel = new NotificationChannel(CHANNEL_ID, "name", NotificationManager.IMPORTANCE_HIGH);
+        mChannel = new NotificationChannel(CHANNEL_ID, "name", NotificationManager.IMPORTANCE_LOW);
         remoteViews = new RemoteViews(getPackageName(),  R.layout.notify);
-        notification = new NotificationCompat.Builder(this, "this is id")
+        Notification.MediaStyle style = new Notification.MediaStyle();
+        Notification.Builder builder = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_compact_disc)
                 .setCustomContentView(remoteViews)
                 .setCustomBigContentView(remoteViews)
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .setChannelId(CHANNEL_ID)
-                .build();
+                .setStyle(style)
+                .setChannelId(CHANNEL_ID);
+        notification = builder.build();
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.createNotificationChannel(mChannel);
         showNoti();
