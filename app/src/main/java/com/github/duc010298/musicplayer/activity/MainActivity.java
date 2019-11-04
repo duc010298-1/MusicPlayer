@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView songName;
     private NotificationChannel mChannel;
     String CHANNEL_ID = "my_channel_01";
+    RemoteViews remoteViews;
+    Notification notification;
+    NotificationManager mNotificationManager;
 
     private BroadcastReceiver receiveData = new BroadcastReceiver() {
         @Override
@@ -109,6 +113,16 @@ public class MainActivity extends AppCompatActivity {
         getSongListOnDevice();
         registerReceiver(receiveData, new IntentFilter("musicRequest"));
         mChannel = new NotificationChannel(CHANNEL_ID, "name", NotificationManager.IMPORTANCE_HIGH);
+        remoteViews = new RemoteViews(getPackageName(),  R.layout.notify);
+        notification = new NotificationCompat.Builder(this, "this is id")
+                .setSmallIcon(R.drawable.ic_compact_disc)
+                .setCustomContentView(remoteViews)
+                .setCustomBigContentView(remoteViews)
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setChannelId(CHANNEL_ID)
+                .build();
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.createNotificationChannel(mChannel);
         showNoti();
     }
 
@@ -252,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void songPicked(View view) {
         playPause.setImageResource(android.R.drawable.ic_media_pause);
+        remoteViews.setImageViewResource(R.id.playPauseNoti, android.R.drawable.ic_media_pause);
         soundService.setSong(Integer.parseInt(view.getTag().toString()));
         soundService.playSong();
     }
@@ -274,12 +289,15 @@ public class MainActivity extends AppCompatActivity {
     public void playPauseClick(View view) {
         showNoti();
         if (soundService.isPlay) {
+            remoteViews.setImageViewResource(R.id.playPauseNoti, android.R.drawable.ic_media_play);
             playPause.setImageResource(android.R.drawable.ic_media_play);
             soundService.pauseSong();
         } else {
+            remoteViews.setImageViewResource(R.id.playPauseNoti, android.R.drawable.ic_media_pause);
             playPause.setImageResource(android.R.drawable.ic_media_pause);
             soundService.resumeSong();
         }
+        mNotificationManager.notify(1, notification);
     }
 
     public void nextClick(View view) {
@@ -292,15 +310,11 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void showNoti() {
-        Notification notification = new NotificationCompat.Builder(this, "this is id")
-                .setSmallIcon(android.R.drawable.ic_delete)
-                .setContentTitle("Title")
-                .setContentText("This is a default notification")
-                .setChannelId(CHANNEL_ID)
-                .build();
-
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.createNotificationChannel(mChannel);
+        remoteViews.setImageViewResource(R.id.thumbnail, R.drawable.ic_compact_disc);
+        remoteViews.setImageViewResource(R.id.pre, android.R.drawable.ic_media_previous);
+        remoteViews.setImageViewResource(R.id.playPauseNoti, android.R.drawable.ic_media_play);
+        remoteViews.setImageViewResource(R.id.nex, android.R.drawable.ic_media_next);
+        remoteViews.setTextViewText(R.id.songName, songListInDevice.get(0).getTitle());
         mNotificationManager.notify(1, notification);
     }
 }
