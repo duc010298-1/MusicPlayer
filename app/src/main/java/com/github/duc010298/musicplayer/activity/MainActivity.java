@@ -1,7 +1,13 @@
 package com.github.duc010298.musicplayer.activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -11,6 +17,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
@@ -50,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnLoop;
     private ImageButton btnMix;
     private TextView songName;
+    private NotificationChannel mChannel;
+    String CHANNEL_ID = "my_channel_01";
 
     private BroadcastReceiver receiveData = new BroadcastReceiver() {
         @Override
@@ -88,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         initVariable();
         getSongListOnDevice();
         registerReceiver(receiveData, new IntentFilter("musicRequest"));
+        mChannel = new NotificationChannel(CHANNEL_ID, "name", NotificationManager.IMPORTANCE_HIGH);
+        showNoti();
     }
 
     @Override
@@ -258,7 +270,9 @@ public class MainActivity extends AppCompatActivity {
         soundService.toggleLoop();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void playPauseClick(View view) {
+        showNoti();
         if (soundService.isPlay) {
             playPause.setImageResource(android.R.drawable.ic_media_play);
             soundService.pauseSong();
@@ -274,5 +288,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void previousClick(View view) {
         soundService.playPrevious();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void showNoti() {
+        Notification notification = new NotificationCompat.Builder(this, "this is id")
+                .setSmallIcon(android.R.drawable.ic_delete)
+                .setContentTitle("Title")
+                .setContentText("This is a default notification")
+                .setChannelId(CHANNEL_ID)
+                .build();
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.createNotificationChannel(mChannel);
+        mNotificationManager.notify(1, notification);
     }
 }

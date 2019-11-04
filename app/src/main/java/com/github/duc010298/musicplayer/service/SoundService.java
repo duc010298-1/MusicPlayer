@@ -104,9 +104,9 @@ public class SoundService extends Service implements MediaPlayer.OnPreparedListe
             playNext();
         } else {
             player.stop();
+            player.seekTo(0);
             playSong();
             player.pause();
-            player.seekTo(0);
             isPlay = false;
         }
     }
