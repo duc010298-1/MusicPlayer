@@ -1,10 +1,5 @@
 package com.github.duc010298.musicplayer.activity;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -23,7 +18,6 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,7 +25,9 @@ import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.duc010298.musicplayer.R;
 import com.github.duc010298.musicplayer.adapter.SongAdapter;
@@ -122,7 +118,8 @@ public class MainActivity extends AppCompatActivity {
                 .setCustomContentView(remoteViews)
                 .setCustomBigContentView(remoteViews)
                 .setStyle(style)
-                .setChannelId(CHANNEL_ID);
+                .setChannelId(CHANNEL_ID)
+                .setOngoing(true);
         notification = builder.build();
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.createNotificationChannel(mChannel);
