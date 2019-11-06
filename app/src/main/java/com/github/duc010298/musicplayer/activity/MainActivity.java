@@ -18,6 +18,7 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -124,6 +125,9 @@ public class MainActivity extends AppCompatActivity {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.createNotificationChannel(mChannel);
         showNoti();
+
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+        bottomSheetDialog.show(getSupportFragmentManager(), bottomSheetDialog.getTag());
     }
 
     @Override
@@ -316,5 +320,9 @@ public class MainActivity extends AppCompatActivity {
         remoteViews.setImageViewResource(R.id.nex, android.R.drawable.ic_media_next);
         remoteViews.setTextViewText(R.id.songName, songListInDevice.get(0).getTitle());
         mNotificationManager.notify(1, notification);
+    }
+
+    public void deleteSong(View view) {
+        Log.e("sdsdasdas", "sdasdsadasdasdsd");
     }
 }
