@@ -3,9 +3,11 @@ package com.github.duc010298.musicplayer.activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -27,6 +29,7 @@ import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     NotificationManager mNotificationManager;
 
     private BroadcastReceiver receiveData = new BroadcastReceiver() {
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
@@ -81,6 +85,18 @@ public class MainActivity extends AppCompatActivity {
                     songName.setText(name);
                     remoteViews.setTextViewText(R.id.songName, name);
                     mNotificationManager.notify(1, notification);
+                }
+                String pause = bundle.getString("pause");
+                if (pause != null && pause.equals("request")) {
+                    playPauseClick(null);
+                }
+                String next = bundle.getString("next");
+                if (next != null && next.equals("request")) {
+                    nextClick(null);
+                }
+                String previous = bundle.getString("previous");
+                if (previous != null && previous.equals("request")) {
+                    previousClick(null);
                 }
             }
         }
@@ -125,9 +141,6 @@ public class MainActivity extends AppCompatActivity {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.createNotificationChannel(mChannel);
         showNoti();
-
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
-        bottomSheetDialog.show(getSupportFragmentManager(), bottomSheetDialog.getTag());
     }
 
     @Override
@@ -251,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
             }
             while (musicCursor.moveToNext());
         }
+        musicCursor.close();
     }
 
     public void search(View view) {
@@ -262,6 +276,8 @@ public class MainActivity extends AppCompatActivity {
                 songListDisplay.add(s);
             }
         }
+        SongAdapter songAdt = new SongAdapter(this, songListDisplay);
+        songView.setAdapter(songAdt);
     }
 
     private boolean containsIgnoreCase(String str, String subString) {
@@ -291,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void playPauseClick(View view) {
-        showNoti();
+//        showNoti();
         if (soundService.isPlay) {
             remoteViews.setImageViewResource(R.id.playPauseNoti, android.R.drawable.ic_media_play);
             playPause.setImageResource(android.R.drawable.ic_media_play);
@@ -312,6 +328,24 @@ public class MainActivity extends AppCompatActivity {
         soundService.playPrevious();
     }
 
+    private PendingIntent onNotiPauseClick(@IdRes int id) {
+        Intent intent = new Intent("musicRequest");
+        intent.putExtra("pause", "request");
+        return PendingIntent.getBroadcast(this, id, intent, 0);
+    }
+
+    private PendingIntent onNextClick(@IdRes int id) {
+        Intent intent = new Intent("musicRequest");
+        intent.putExtra("next", "request");
+        return PendingIntent.getBroadcast(this, id, intent, 0);
+    }
+
+    private PendingIntent onPreviousClick(@IdRes int id) {
+        Intent intent = new Intent("musicRequest");
+        intent.putExtra("previous", "request");
+        return PendingIntent.getBroadcast(this, id, intent, 0);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void showNoti() {
         remoteViews.setImageViewResource(R.id.thumbnail, R.drawable.ic_compact_disc);
@@ -319,10 +353,44 @@ public class MainActivity extends AppCompatActivity {
         remoteViews.setImageViewResource(R.id.playPauseNoti, android.R.drawable.ic_media_play);
         remoteViews.setImageViewResource(R.id.nex, android.R.drawable.ic_media_next);
         remoteViews.setTextViewText(R.id.songName, songListInDevice.get(0).getTitle());
+        remoteViews.setOnClickPendingIntent(R.id.playPauseNoti, onNotiPauseClick(R.id.playPauseNoti));
+        remoteViews.setOnClickPendingIntent(R.id.pre, onPreviousClick(R.id.pre));
+        remoteViews.setOnClickPendingIntent(R.id.nex, onNextClick(R.id.nex));
         mNotificationManager.notify(1, notification);
+    }
+
+    private int positionSongOpenMenu = 0;
+
+    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+
+    public void openBottomMenu(View view) {
+        positionSongOpenMenu = Integer.parseInt(view.getTag().toString());
+        bottomSheetDialog.show(getSupportFragmentManager(), bottomSheetDialog.getTag());
     }
 
     public void deleteSong(View view) {
         Log.e("sdsdasdas", "sdasdsadasdasdsd");
+        Song deleteSong = songListDisplay.get(positionSongOpenMenu);
+        long currSong = deleteSong.getId();
+        Uri trackUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currSong);
+
+        getContentResolver().delete(trackUri, null, null);
+
+        songListInDevice.clear();
+        songListDisplay.clear();
+        getSongListOnDevice();
+
+        SongAdapter songAdt = new SongAdapter(this, songListDisplay);
+        songView.setAdapter(songAdt);
+
+        bottomSheetDialog.dismiss();
+    }
+
+    public void reloadList(View view) {
+        songListInDevice.clear();
+        songListDisplay.clear();
+        getSongListOnDevice();
+        SongAdapter songAdt = new SongAdapter(this, songListDisplay);
+        songView.setAdapter(songAdt);
     }
 }

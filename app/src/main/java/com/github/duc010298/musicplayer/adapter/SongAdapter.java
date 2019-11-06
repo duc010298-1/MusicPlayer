@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ public class SongAdapter extends BaseAdapter {
         TextView artistView = (TextView) songLayout.findViewById(R.id.songArtist);
         ImageView albumView = (ImageView) songLayout.findViewById(R.id.album);
         TextView duration = (TextView) songLayout.findViewById(R.id.duration);
+        ImageButton detailMenu = (ImageButton) songLayout.findViewById(R.id.menuIcon);
         //get song using position
         Song currSong = songs.get(position);
         //get title and artist strings
@@ -56,6 +58,7 @@ public class SongAdapter extends BaseAdapter {
         duration.setText(convertDuration(currSong.getDuration()));
         //set position as tag
         songLayout.setTag(position);
+        detailMenu.setTag(position);
         return songLayout;
     }
 

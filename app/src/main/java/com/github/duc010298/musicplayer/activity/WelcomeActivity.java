@@ -1,9 +1,5 @@
 package com.github.duc010298.musicplayer.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,8 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.github.duc010298.musicplayer.R;
 
@@ -30,12 +29,16 @@ public class WelcomeActivity extends AppCompatActivity {
     private void checkPermission() {
         String[] listPermission = new String[]{
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WAKE_LOCK,};
+                android.Manifest.permission.WAKE_LOCK,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
         boolean isHaveEnoughPermission = true;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             isHaveEnoughPermission = false;
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED) {
+            isHaveEnoughPermission = false;
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             isHaveEnoughPermission = false;
         }
         if (!isHaveEnoughPermission) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -7,7 +8,7 @@
     android:orientation="vertical"
     android:padding="5dp" >
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
@@ -47,8 +48,18 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:text="00:00"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/menuIcon"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/menuIcon"
+            android:background="@null"
+            android:layout_width="31dp"
+            android:layout_height="51dp"
+            android:onClick="openBottomMenu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_menu" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

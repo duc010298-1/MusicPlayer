@@ -12,7 +12,7 @@
         android:layout_height="64dp"
         android:drawableLeft="@android:drawable/ic_menu_delete"
         android:onClick="deleteSong"
-        android:text="Xóa"
+        android:text="Xóa khỏi bộ nhớ"
         android:textAlignment="viewEnd" />
 
 

@@ -10,12 +10,13 @@
 
     <EditText
         android:id="@+id/inputSearch"
-        android:layout_width="344dp"
+        android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginStart="8dp"
         android:ems="10"
         android:hint="@string/search"
         android:inputType="textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/btnSearch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,8 +26,7 @@
         android:layout_height="51dp"
         android:contentDescription=" "
         android:onClick="search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/inputSearch"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_search" />
 
@@ -128,5 +128,14 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/timeLine"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:onClick="reloadList"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_rotate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
