@@ -16,6 +16,7 @@ import android.util.Log;
 import com.github.duc010298.musicplayer.model.Song;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class SoundService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
     public class MusicBinder extends Binder {
@@ -103,8 +104,6 @@ public class SoundService extends Service implements MediaPlayer.OnPreparedListe
         if (isLoop) {
             playNext();
         } else {
-            player.stop();
-            player.seekTo(0);
             playSong();
             player.pause();
             isPlay = false;
@@ -116,23 +115,38 @@ public class SoundService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public void playNext() {
-        songIndex++;
+        if (isMix) {
+            songIndex = getRandomNumberInRange(0, songs.size() - 1);
+        } else {
+            songIndex++;
+        }
+
         if (songIndex == songs.size()) {
-            if (!isLoop) {
-                player.stop();
-                player.seekTo(0);
-                isPlay = false;
-                return;
-            }
+//            if (!isLoop) {
+//                player.stop();
+//                player.seekTo(0);
+//                isPlay = false;
+//                return;
+//            }
             songIndex = 0;
         }
         playSong();
     }
 
+    private static int getRandomNumberInRange(int min, int max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
+    }
+
     public void playPrevious() {
         songIndex--;
         if (songIndex < 0) {
-            songIndex = songs.size()-1;
+            songIndex = songs.size() - 1;
         }
         playSong();
     }

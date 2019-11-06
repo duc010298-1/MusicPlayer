@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.RequiresApi;
@@ -384,6 +385,7 @@ public class MainActivity extends AppCompatActivity {
         songView.setAdapter(songAdt);
 
         bottomSheetDialog.dismiss();
+        Toast.makeText(this, "Đã xóa khỏi bộ nhớ", Toast.LENGTH_SHORT).show();
     }
 
     public void reloadList(View view) {
@@ -392,5 +394,6 @@ public class MainActivity extends AppCompatActivity {
         getSongListOnDevice();
         SongAdapter songAdt = new SongAdapter(this, songListDisplay);
         songView.setAdapter(songAdt);
+        Toast.makeText(this, "Đã tải lại danh sách", Toast.LENGTH_SHORT).show();
     }
 }
