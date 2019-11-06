@@ -10,8 +10,11 @@
         android:id="@+id/btnDelete"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:drawableLeft="@android:drawable/ic_menu_delete"
+        android:background="@null"
+        android:drawableLeft="@drawable/ic_rubbish_bin"
         android:onClick="deleteSong"
+        android:paddingLeft="20dp"
+        android:paddingRight="230dp"
         android:text="Xóa khỏi bộ nhớ"
         android:textAlignment="viewEnd" />
 

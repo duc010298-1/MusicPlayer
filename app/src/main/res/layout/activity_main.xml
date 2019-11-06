@@ -10,8 +10,8 @@
 
     <EditText
         android:id="@+id/inputSearch"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_width="302dp"
+        android:layout_height="53dp"
         android:layout_marginStart="8dp"
         android:ems="10"
         android:hint="@string/search"
@@ -21,69 +21,83 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
+        android:background="@null"
         android:id="@+id/btnSearch"
         android:layout_width="51dp"
+        android:tint="#3a3a3a"
         android:layout_height="51dp"
         android:contentDescription=" "
         android:onClick="search"
         app:layout_constraintEnd_toStartOf="@+id/imageButton"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_search" />
+        app:srcCompat="@drawable/ic_searching_magnifying_glass" />
 
     <ImageButton
+        android:background="@null"
         android:id="@+id/btnMix"
         android:layout_width="51dp"
         android:layout_height="51dp"
-        android:layout_marginStart="80dp"
+        android:layout_marginStart="4dp"
         android:layout_marginBottom="16dp"
         android:contentDescription=" "
         android:onClick="mixClick"
-        android:tint="#FFFFFF"
+        android:tint="#3a3a3a"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_shuffle_mode_arrows" />
+        app:srcCompat="@drawable/ic_shufflent" />
 
     <ImageButton
+        android:tint="#3a3a3a"
+        android:background="@null"
         android:id="@+id/btnPlayPause"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="13dp"
         android:contentDescription=" "
         android:onClick="playPauseClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnPrevious"
-        app:srcCompat="@android:drawable/ic_media_play" />
+        app:srcCompat="@drawable/ic_play_circle" />
 
     <ImageButton
+        android:tint="#3a3a3a"
+        android:background="@null"
         android:id="@+id/btnPrevious"
         android:layout_width="51dp"
         android:layout_height="51dp"
+        android:layout_marginStart="50dp"
         android:layout_marginBottom="16dp"
         android:contentDescription=" "
         android:onClick="previousClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnMix"
-        app:srcCompat="@android:drawable/ic_media_previous" />
+        app:srcCompat="@drawable/ic_previous_track" />
 
     <ImageButton
+        android:tint="#3a3a3a"
+        android:background="@null"
         android:id="@+id/btnNext"
         android:layout_width="51dp"
         android:layout_height="51dp"
+        android:layout_marginStart="20dp"
         android:layout_marginBottom="16dp"
         android:contentDescription=" "
         android:onClick="nextClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnPlayPause"
-        app:srcCompat="@android:drawable/ic_media_next" />
+        app:srcCompat="@drawable/ic_play_next_button" />
 
     <ImageButton
+        android:background="@null"
         android:id="@+id/btnLoop"
         android:layout_width="51dp"
         android:layout_height="51dp"
+        android:layout_marginStart="50dp"
         android:layout_marginBottom="16dp"
         android:contentDescription=" "
         android:onClick="loopClick"
-        android:tint="#FFFFFF"
+        android:tint="#3a3a3a"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.023"
@@ -124,18 +138,20 @@
         android:id="@+id/songName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:tint="#3a3a3a"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/timeLine"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageButton
+        android:background="@null"
         android:id="@+id/imageButton"
-        android:onClick="reloadList"
         android:layout_width="51dp"
         android:layout_height="51dp"
+        android:onClick="reloadList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_rotate" />
+        app:srcCompat="@drawable/ic_update_arrows" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
