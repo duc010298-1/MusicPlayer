@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         getSongListOnDevice();
         registerReceiver(receiveData, new IntentFilter("musicRequest"));
         mChannel = new NotificationChannel(CHANNEL_ID, "name", NotificationManager.IMPORTANCE_LOW);
-        remoteViews = new RemoteViews(getPackageName(),  R.layout.notify);
+        remoteViews = new RemoteViews(getPackageName(), R.layout.notify);
         Notification.MediaStyle style = new Notification.MediaStyle();
         Notification.Builder builder = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_compact_disc)
@@ -286,8 +287,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void songPicked(View view) {
-        playPause.setImageResource(android.R.drawable.ic_media_pause);
-        remoteViews.setImageViewResource(R.id.playPauseNoti, android.R.drawable.ic_media_pause);
+        playPause.setImageResource(R.drawable.ic_rounded_pause_button);
+        remoteViews.setImageViewResource(R.id.playPauseNoti, R.drawable.ic_rounded_pause_button);
         soundService.setSong(Integer.parseInt(view.getTag().toString()));
         soundService.playSong();
     }
@@ -297,11 +298,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void mixClick(View view) {
+        if (isMix) {
+            btnMix.setColorFilter(Color.rgb(58, 58, 58), android.graphics.PorterDuff.Mode.SRC_IN);
+        } else {
+            btnMix.setColorFilter(Color.rgb(177, 23, 232), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
         isMix = !isMix;
         soundService.toggleMix();
     }
 
     public void loopClick(View view) {
+        if (isLoop) {
+            btnLoop.setColorFilter(Color.rgb(58, 58, 58), android.graphics.PorterDuff.Mode.SRC_IN);
+        } else {
+            btnLoop.setColorFilter(Color.rgb(177, 23, 232), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
         isLoop = !isLoop;
         soundService.toggleLoop();
     }
@@ -310,12 +321,12 @@ public class MainActivity extends AppCompatActivity {
     public void playPauseClick(View view) {
 //        showNoti();
         if (soundService.isPlay) {
-            remoteViews.setImageViewResource(R.id.playPauseNoti, android.R.drawable.ic_media_play);
-            playPause.setImageResource(android.R.drawable.ic_media_play);
+            remoteViews.setImageViewResource(R.id.playPauseNoti, R.drawable.ic_play_circle);
+            playPause.setImageResource(R.drawable.ic_play_circle);
             soundService.pauseSong();
         } else {
-            remoteViews.setImageViewResource(R.id.playPauseNoti, android.R.drawable.ic_media_pause);
-            playPause.setImageResource(android.R.drawable.ic_media_pause);
+            remoteViews.setImageViewResource(R.id.playPauseNoti, R.drawable.ic_rounded_pause_button);
+            playPause.setImageResource(R.drawable.ic_rounded_pause_button);
             soundService.resumeSong();
         }
         mNotificationManager.notify(1, notification);
@@ -350,9 +361,9 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void showNoti() {
         remoteViews.setImageViewResource(R.id.thumbnail, R.drawable.ic_compact_disc);
-        remoteViews.setImageViewResource(R.id.pre, android.R.drawable.ic_media_previous);
-        remoteViews.setImageViewResource(R.id.playPauseNoti, android.R.drawable.ic_media_play);
-        remoteViews.setImageViewResource(R.id.nex, android.R.drawable.ic_media_next);
+        remoteViews.setImageViewResource(R.id.pre, R.drawable.ic_previous_track);
+        remoteViews.setImageViewResource(R.id.playPauseNoti, R.drawable.ic_play_circle);
+        remoteViews.setImageViewResource(R.id.nex, R.drawable.ic_play_next_button);
         remoteViews.setTextViewText(R.id.songName, songListInDevice.get(0).getTitle());
         remoteViews.setOnClickPendingIntent(R.id.playPauseNoti, onNotiPauseClick(R.id.playPauseNoti));
         remoteViews.setOnClickPendingIntent(R.id.pre, onPreviousClick(R.id.pre));
